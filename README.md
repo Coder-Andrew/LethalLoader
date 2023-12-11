@@ -3,7 +3,7 @@ Lethal Loader is a **very crudely** put together mod loader/updater for Lethal C
 
 # How to use:
 1. Drag Lethal Loader into a folder that is next to your Steam folder. This will not work if your Steam folder is in your C drive
-1. Double click the loader.exe and enjoy!
+1. Double click the LethalLoader.exe and enjoy!
 
 ### Example Directory:
 - **E Drive/**
