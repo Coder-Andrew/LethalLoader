@@ -13,8 +13,8 @@ if __name__ == '__main__':
     ul.download_mod(lc_api_file, "lc_api.zip")
     ul.download_mod(lobbies_file, "bigger_lobbies.zip")
 
-    ul.unzip("lc_api.zip")
-    ul.unzip("bigger_lobbies.zip")
+    ul.unzip_dlls("lc_api.zip")
+    ul.unzip_dlls("bigger_lobbies.zip")
 
 
     ul.update_current_plugins(lc_bepin_path)

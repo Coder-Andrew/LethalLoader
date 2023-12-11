@@ -117,7 +117,7 @@ def update_current_plugins(plugins):
     print("Updated plugins")
     shutil.copytree(resources_path, plugins)
 
-def unzip(filename):
+def unzip_dlls(filename):
     print(f"Unzipping zip file: {filename}")
     file_path = os.path.join(os.getcwd(), "resources", "zips", filename)
     dir_name = os.path.join(os.getcwd(), "resources", "raws")
