@@ -15,8 +15,7 @@ def find_lc():
 
     if (not os.path.exists(steam_path) and not os.path.exists(steam_lib_path)):
         print(f"Could not find Lethal Company at either {steam_path} or {steam_lib_path}")
-        print("Could not find Lethal Company")
-        finish_program()
+        print("Could not find Lethal Company")        
         raise ValueError("Lethal Company not found")
     elif(os.path.exists(steam_path)):
         path = steam_path
@@ -26,7 +25,7 @@ def find_lc():
     print(f"Found Lethal Company at: {path}")
     return path
 
-def overwrite_directory():
+def overwrite_resources_directory():
     print("Setting up updater resource files")
 
     resources_path = os.path.join(os.getcwd(), "resources")
@@ -93,7 +92,7 @@ def download_mod(mod_url, fileName):
 
 def find_bepin(lc_path):
     plugins_path = os.path.join(lc_path, "BepinEx", "plugins")
-    print("Looking for BepinEx plugins at: {plugins_path}")
+    print(f"Looking for BepinEx plugins at: {plugins_path}")
 
     if (not os.path.exists(plugins_path)):
         print(f"Please run fresh_install in order to install BepinEx and mods. Could not find BepinEx at: {plugins_path}")
@@ -133,3 +132,80 @@ def unzip_dlls(filename):
         print(f"Error: {filename} does not exist.")
     except zipfile.BadZipFile:
         print("Error: Bad zip file.")
+
+def unzip_dlls_to_path(file_path, output_path):
+    print(f"Unzipping zip file at: {file_path}")
+    try:
+        with zipfile.ZipFile(file_path, "r") as zip_ref:
+            for file in zip_ref.namelist():
+                if file.endswith('.dll'):
+                    with tempfile.TemporaryDirectory() as tmpdirname:
+                        zip_ref.extract(file, tmpdirname)
+                        shutil.move(os.path.join(tmpdirname, file), os.path.join(output_path, os.path.basename(file)))
+        print("Extraction successful.")
+    except FileNotFoundError:
+        print(f"Error: {file_path} does not exist.")
+    except zipfile.BadZipFile:
+        print("Error: Bad zip file.")
+
+def unzip(filepath, output_path = os.path.join(os.getcwd(), "resources", "raws")):
+    print(f"Unzipping zip file at: {filepath}")
+    try:
+        with zipfile.ZipFile(filepath, "r") as zip_ref:
+            print(f"Unzipping to: {output_path}")
+            zip_ref.extractall(output_path)
+    except FileNotFoundError:
+        print(f"Error: Zip at path: {filepath} does not exist.")
+    except zipfile.BadZipFile:
+        print("Error: Bad zip file.")
+
+def bepinex_exists(lc_path):
+    return os.path.exists(os.path.join(lc_path,"BepinEx"))
+
+def get_resources_path():
+    return os.path.join(os.getcwd(), "resources")
+
+def get_path_of_file(file_name, directory = os.path.join(os.getcwd(), "resources", "zips")):
+    print(f"Looking for: {file_name} in {directory}")
+    for root, dirs, files in os.walk(directory):
+        if file_name in files:
+            return os.path.join(root, file_name)
+    return None
+
+def get_path_of_folder(folder_name, directory = os.path.join(os.getcwd(), "resources", "raws")):
+    print(f"Looking for: {folder_name} in {directory}")
+    for root, dirs, _ in os.walk(directory):
+        if folder_name in dirs:
+            return os.path.join(root, folder_name)
+    return None
+
+def get_raws_path():
+    return os.path.join(os.getcwd(), "resources", "raws")
+
+def create_plugins_folder(bepin_path):
+    plugins_path = os.path.join(bepin_path, "plugins")
+    print(f"Adding plugins folder to BepinEx at path: {plugins_path}")
+    
+    if os.path.exists(plugins_path):
+        print(f"Plugins path exists, removing...")
+        shutil.rmtree(plugins_path)
+    
+    os.mkdir(plugins_path)
+
+    return plugins_path
+
+def copy_contents(src, dst):
+    print(f"Copying contents from {src} to {dst}")
+    if not os.path.exists(dst):
+        print(f"Could not find LC folder")
+        raise FileNotFoundError("Could not find LC folder")
+    
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+
+        print(f"Copying {item} to {d}")
+        if os.path.isdir(s):
+            shutil.copytree(s, d, dirs_exist_ok=True)
+        else:
+            shutil.copy2(s,d)

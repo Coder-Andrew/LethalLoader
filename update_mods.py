@@ -1,7 +1,7 @@
 import updater_lib as ul
 
-if __name__ == '__main__':
-    ul.overwrite_directory()
+def update_lc_mods():
+    ul.overwrite_resources_directory()
     lc_bepin_path = ul.find_bepin(ul.find_lc())
 
     lc_api_base = "https://thunderstore.io/c/lethal-company/p/2018/LC_API/"
@@ -18,6 +18,3 @@ if __name__ == '__main__':
 
 
     ul.update_current_plugins(lc_bepin_path)
-
-    input("Press enter to close...")
-    #ul.finish_program()
