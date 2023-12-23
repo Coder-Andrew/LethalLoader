@@ -22,11 +22,16 @@ def fresh_install_lc_mods():
 
     ul.unzip(b_zip_p)
     b_raw_path = ul.get_path_of_folder("BepInEx")
-    b_plugins_path = ul.create_plugins_folder(b_raw_path)
+    #b_plugins_path = ul.create_plugins_folder(b_raw_path)
     
     raws_path = ul.get_raws_path()
 
-    ul.unzip_dlls_to_path(ul.get_path_of_file(lc_api_zip_name), b_plugins_path)
-    ul.unzip_dlls_to_path(ul.get_path_of_file(bigger_lobbies_zip_name), b_plugins_path)
+    ul.unzip_and_install(lc_api_zip_name, b_raw_path)
+    ul.unzip_and_install(bigger_lobbies_zip_name, b_raw_path)
 
     ul.copy_contents(raws_path, lc_path)
+
+
+if __name__ == '__main__':
+    fresh_install_lc_mods()
+    input("Install complete, press enter...")

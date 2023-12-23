@@ -209,3 +209,49 @@ def copy_contents(src, dst):
             shutil.copytree(s, d, dirs_exist_ok=True)
         else:
             shutil.copy2(s,d)
+
+
+def unzip_and_install(
+        zip_name
+        , dst_folder_name = "BepinEx"
+    ):
+
+    dst_dir = dst_folder_name
+
+    if not os.path.exists(dst_folder_name):
+        dst_dir = os.path.join(os.getcwd(), "resources", "raws", dst_folder_name)
+        
+    zip_src_dir = os.path.join(os.getcwd(), "resources", "zips", zip_name)
+
+    if not os.path.exists(zip_src_dir):
+        print(f"{zip_src_dir} does not exist")
+        raise ValueError(f"{zip_src_dir} does not exist")
+    
+    if not os.path.exists(dst_dir):
+        print(f"{dst_dir} does not exist")
+        raise ValueError(f"{dst_dir} does not exist")
+    
+    temp = os.path.join(os.getcwd(), "temp")
+
+    if os.path.exists(temp):
+        print("Removing temp folder")
+        shutil.rmtree(temp)
+
+    print("Creating temp folder")
+    os.makedirs(temp)
+    
+    with zipfile.ZipFile(zip_src_dir, "r") as zip_ref:
+        for file in zip_ref.namelist():
+            if file.lower().startswith("bepinex"):
+                print(f"Moving BepinEx folder to temp. Zip_Name: {zip_src_dir}")
+                zip_ref.extract(file, temp)
+
+    temp_bepin = os.path.join(temp, "BepinEx")
+
+    print(temp_bepin, "-", dst_dir)
+
+    print(f"Moving {zip_name} to {dst_folder_name}")
+    shutil.copytree(temp_bepin, dst_dir, dirs_exist_ok=True)
+
+    print("Removing temp folder")
+    shutil.rmtree(temp)
